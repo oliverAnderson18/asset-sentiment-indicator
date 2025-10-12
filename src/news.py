@@ -18,4 +18,5 @@ def get_news(asset: str) -> pd.DataFrame:
     data = response.json() 
     
     df = pd.DataFrame(data["articles"])[["publishedAt", "title", "description", "content"]]
+    df["publishedAt"] = pd.to_datetime(df["publishedAt"])
     return df
