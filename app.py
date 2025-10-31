@@ -67,8 +67,7 @@ if st.session_state.run_ta and st.session_state.selected_indicators:
     with st.spinner("Analysing TA..."):
         try:
             df_ta = get_ta_records(get_financial_records(asset), st.session_state.selected_indicators)
-            st.dataframe(df_ta)
-            st.success(f"Running TA analysis with: {', '.join(st.session_state.selected_indicators)}")
+            st.success(f"Running technical analysis with: {', '.join(st.session_state.selected_indicators)}")
             plot_ta_columns_in_rows(df_ta, columns_to_plot=st.session_state.selected_indicators)
             st.session_state.run_ta = False
         except ValueError as e:

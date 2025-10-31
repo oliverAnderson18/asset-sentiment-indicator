@@ -2,7 +2,7 @@ import yfinance as yf
 import pandas as pd
 import ta
 
-options = ["SMA50", "SMA200", "MACD", "ADX", "RSI", "Stochastic Oscillator",
+options = ["SMA50", "SMA200", "MACD", "ADX", "RSI", "Stochastic Oscillator 14D",
            "OBV", "MA50", "Bollinger Bands", "ATR"]
 
 
@@ -22,7 +22,7 @@ def get_financial_records(ticker: str) -> pd.DataFrame:
 
 def get_ta_records(df: pd.DataFrame, options: list) -> pd.DataFrame:
     df = df.copy()
-    close = df["close"].squeeze()   # fuerza a Serie 1D
+    close = df["close"].squeeze() 
     high = df["high"].squeeze()
     low = df["low"].squeeze()
     volume = df["volume"].squeeze()
@@ -41,7 +41,7 @@ def get_ta_records(df: pd.DataFrame, options: list) -> pd.DataFrame:
     if "RSI" in options:
         rsi = ta.momentum.RSIIndicator(close)
         df["RSI"] = rsi.rsi()
-    if "Stochastic Oscillator" in options:
+    if "Stochastic Oscillator 14D" in options:
         stoch = ta.momentum.StochasticOscillator(high, low, close)
         df["Stoch"] = stoch.stoch()
         df["Stoch_signal"] = stoch.stoch_signal()
