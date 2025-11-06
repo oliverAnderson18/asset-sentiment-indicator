@@ -2,8 +2,11 @@ from src.finance import options, get_financial_records, get_ta_records
 from src.news import get_news
 from src.sentiment import sentiment_score
 from src.auxiliar import mean_average_score, plot_ta_columns_in_rows
+from src.keyfrases import keyfrases
 import streamlit as st
 import pandas as pd
+import plotly.express as px
+from collections import Counter
 
 st.title("Asset Sentiment Indicator")
 
@@ -43,6 +46,12 @@ def get_cached_ta_records(ticker, indicators_tuple):
     df = get_cached_financial_records(ticker)
     return get_ta_records(df, list(indicators_tuple))
 
+def extract_keywords_from_content(df, keywords):
+    text = " ".join(df["content"].dropna().astype(str)).lower()
+    found = [kw for kw in keywords if kw in text]
+    counter = Counter(found)
+    return pd.DataFrame(counter.most_common(10), columns=["Keyword", "Count"])
+
 if st.button("Start analysis"):
     with st.spinner("Analysing..."):
         try:
@@ -63,12 +72,32 @@ if st.button("Start analysis"):
             st.error(f"Error fetching news: {e}")
 
 if st.session_state.analysis_done:
+    df = st.session_state.df
     st.caption(f"Fetching dates up to {st.session_state.first_date}")
     st.caption(f"News from sources like {st.session_state.result}")
     st.header(f"Average sentiment score is: {st.session_state.mean_sentiment:.2f}")
-    st.subheader(f"{mean_average_score(st.session_state.mean_sentiment)}")
+    st.markdown(f"{mean_average_score(st.session_state.mean_sentiment)}")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        fig_hist = px.histogram(
+            df, x="sentiment", nbins=20, range_x=[0, 100],
+            title="Sentiment Distribution",
+            labels={"sentiment": "Sentiment Score", "count": "Frequency"}
+        )
+        st.plotly_chart(fig_hist, use_container_width=True)
+
+    with col2:
+        df_kw = extract_keywords_from_content(df, keyfrases)
+        if not df_kw.empty:
+            fig_pie = px.pie(df_kw, names="Keyword", values="Count", title="Most Frequent Financial Phrases")
+            st.plotly_chart(fig_pie, use_container_width=True)
+        else:
+            st.info("No financial phrases found in news content.")
 
     with st.form("ta_form"):
+        st.header("TA analysis:")
         selected = st.multiselect("Select the indicators desired", options, default=st.session_state.selected_indicators)
         submitted = st.form_submit_button("Confirm Picks")
     if submitted:

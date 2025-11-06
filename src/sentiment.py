@@ -26,3 +26,4 @@ def sentiment_score(row: pd.Series) -> float:
     avg_score = sum(scores) / len(scores) if scores else 0
     percent = (avg_score + 1) * 50
     return percent
+
