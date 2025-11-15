@@ -31,11 +31,22 @@ A step by step series of examples that tell you how to get a development env run
 
 ## Deployment
 
-Deploy on streamlit
+### Recommended option: Deploy on streamlit
 
 Go to the [streamlit app](https://asset-sentiment-indicator.streamlit.app/)
-
 *Note: It may take a few minutes to deploy. This is due to heavy dependencies used.
+
+### Another option: Run locally
+
+*Note: To use this option, you must have an account created in [newsapi](newsapi.org)
+
+Create a .env file in the project root:
+
+NEWSAPI_KEY=your_real_newsapi_key_here
+
+Run the streamlit app:
+
+streamlit run app.py
 
 ## Built With
 
