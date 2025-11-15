@@ -5,3 +5,5 @@ requests
 python-dotenv
 yfinance
 ta
+transformers
+torch
