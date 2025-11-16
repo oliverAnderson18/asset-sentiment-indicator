@@ -3,7 +3,8 @@ import pandas as pd
 import ta
 
 options = ["SMA50", "SMA200", "MACD", "ADX", "RSI", "Stochastic Oscillator 14D",
-           "OBV", "MA50", "Bollinger Bands", "ATR"]
+           "OBV", "MA50", "Bollinger Bands", "ATR", "Volume", "Open", "Close", "High",
+           "Low"]
 
 
 def get_financial_records(ticker: str) -> pd.DataFrame:
