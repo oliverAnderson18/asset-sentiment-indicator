@@ -58,7 +58,15 @@ def get_ta_records(df: pd.DataFrame, options: list) -> pd.DataFrame:
     if "ATR" in options:
         atr = ta.volatility.AverageTrueRange(high, low, close)
         df["ATR"] = atr.average_true_range()
-    if "Volume" or "High" or "Low" or "Open" or "Close" in options:
-        pass
+    if "Open" in options:
+        df["Open"] = df["open"]
+    if "Close" in options:
+        df["Close"] = df["close"]
+    if "High" in options:
+        df["High"] = df["high"]
+    if "Low" in options:
+        df["Low"] = df["low"]
+    if "Volume" in options and volume is not None:
+        df["Volume"] = volume
 
     return df.dropna()
